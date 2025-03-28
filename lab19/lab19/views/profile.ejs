@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>посты <%= username %></h1>
+    <form action="/posts/create" method="POST">
+        <input type="text" name="title" placeholder="Заголовок" required>
+        <textarea name="content" placeholder="Содержание" required></textarea>
+        <button type="submit">Создать пост</button>
+    </form>
+    
+    <ul>
+        <% posts.forEach(post => { %>
+            <li>
+                <h3><%= post.title %></h3>
+                <p><%= post.content %></p>
+                <form action="/posts/delete/<%= post._id %>" method="POST">
+                    <button type="submit">Удалить</button>
+                </form>
+                <a href="/posts/update/<%= post._id %>">изменить</a>
+            </li>
+        <% }) %>
+    </ul>
+    <a href="/user/logout">Выйти</a>
+</body>
+</html>
+
+
+
+

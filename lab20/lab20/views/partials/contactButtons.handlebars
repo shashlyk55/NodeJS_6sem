@@ -1,0 +1,5 @@
+{{#each contacts}}
+  <button 
+    class="contact_button" 
+    {{#if ../isDisabled}}disabled{{/if}}>{{this}}</button>  
+{{/each}}
