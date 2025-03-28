@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>lab-14</title>
+  </head>
+  <style>
+    body{
+      display: flex;
+      flex-direction: column;
+    }
+    #container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+    #container > div {
+      width: 25%;
+    }
+  </style>
+  <body>
+    <div id="container">
+      <div>
+        <h2>GET api/pulpits</h2>
+        <button id="load-pulpits" onclick="{getPulpit()}">load</button>
+        <div id="pulpit-list"></div>
+      </div>
+
+      <div>
+        <h2>Добавить кафедру</h2>
+        <div>
+          <div class="form-group">
+            <label for="pulpit">Код кафедры:</label>
+            <input type="text" id="pulpit" required />
+          </div>
+          <div class="form-group">
+            <label for="pulpitName">Название кафедры:</label>
+            <input type="text" id="pulpitName" required />
+          </div>
+          <div class="form-group">
+            <label for="facultyForPulpit">Факультет:</label>
+            <input type="text" id="facultyForPulpit" required />
+          </div>
+          <button id="add-pulpit" onclick="{postPulpit()}">Добавить кафедру</button>
+        </div>
+      </div>
+
+      <div>
+        <h2>Редактировать кафедру</h2>
+        <div>
+          <div class="form-group">
+            <label for="editPulpit">Код кафедры для редактирования:</label>
+            <input type="text" id="editPulpit" required />
+          </div>
+          <div class="form-group">
+            <label for="editPulpitName">Новое название кафедры:</label>
+            <input type="text" id="editPulpitName" required />
+          </div>
+          <div class="form-group">
+            <label for="editFacultyForPulpit">Новый факультет:</label>
+            <input type="text" id="editFacultyForPulpit" required />
+          </div>
+          <button id="update-pulpit" onclick="{putPulpit()}">Обновить кафедру</button>
+        </div>
+      </div>
+
+      <div>
+        <h2>Удалить кафедру</h2>
+        <div>
+          <div class="form-group">
+            <label for="deletePulpit">Код кафедры для удаления:</label>
+            <input type="text" id="deletePulpit" required />
+          </div>
+          <button id="delete-pulpit" onclick="{delPulpit()}">Удалить кафедру</button>
+        </div>
+      </div>
+    </div>  
+
+    <div id="container">
+      <div>
+        <h2>GET api/faculties</h2>
+        <button id="load-faculties" onclick="{getFaculties()}">load</button>
+        <div id="faculties-list"></div>
+      </div>
+
+      <div>
+        <h2>Добавить факультет</h2>
+        <div>
+          <div class="form-group">
+            <label for="faculty">Код факультета:</label>
+            <input type="text" id="faculty" required />
+          </div>
+          <div class="form-group">
+            <label for="facultyName">Название факултета:</label>
+            <input type="text" id="facultyName" required />
+          </div>
+          <button id="add-faculty" onclick="{postFaculty()}">Добавить</button>
+        </div>
+      </div>
+
+      <div>
+        <h2>Редактировать факультет</h2>
+        <div>
+          <div class="form-group">
+            <label for="editFaculty">Код факультета:</label>
+            <input type="text" id="editFaculty" required />
+          </div>
+          <div class="form-group">
+            <label for="editFacultyName">Название факультета:</label>
+            <input type="text" id="editFacultyName" required />
+          </div>
+          <button id="update-faculty" onclick="{putFaculty()}">Обновить</button>
+        </div>
+      </div>
+
+      <div>
+        <h2>Удалить факультет</h2>
+        <div>
+          <div class="form-group">
+            <label for="deleteFaculty">Код кафедры для удаления:</label>
+            <input type="text" id="deleteFaculty" required />
+          </div>
+          <button id="delete-faculty" onclick="{delFaculty()}">Удалить</button>
+        </div>
+      </div>
+    </div>
+    
+    <div id="container">
+      <div>
+        <h2>GET api/subjects</h2>
+        <button id="load-subjects" onclick="{getSubject()}">load</button>
+        <div id="subject-list"></div>
+      </div>
+
+      <div>
+        <h2>Добавить предмет</h2>
+        <div>
+          <div class="form-group">
+            <label for="subject">Код предмета:</label>
+            <input type="text" id="subject" required />
+          </div>
+          <div class="form-group">
+            <label for="subjectName">Название предмета:</label>
+            <input type="text" id="subjectName" required />
+          </div>
+          <div class="form-group">
+            <label for="pulpitForSubject">кафедра:</label>
+            <input type="text" id="pulpitForSubject" required />
+          </div>
+          <button id="add-subject" onclick="{postSubject()}">Добавить</button>
+        </div>
+      </div>
+
+      <div>
+        <h2>Редактировать кафедру</h2>
+        <div>
+          <div class="form-group">
+            <label for="editSubject">Код предмета для редактирования:</label>
+            <input type="text" id="editSubject" required />
+          </div>
+          <div class="form-group">
+            <label for="editSubjectName">Новое название предмет:</label>
+            <input type="text" id="editSubjectName" required />
+          </div>
+          <div class="form-group">
+            <label for="editPulpitForSubject">кафедра:</label>
+            <input type="text" id="editPulpitForSubject" required />
+          </div>
+          <button id="update-subject" onclick="{putSubject()}">Обновить</button>
+        </div>
+      </div>
+
+      <div>
+        <h2>Удалить предмет</h2>
+        <div>
+          <div class="form-group">
+            <label for="deleteSubject">Код кафедры для удаления:</label>
+            <input type="text" id="deleteSubject" required />
+          </div>
+          <button id="delete-subject" onclick="{delSubject()}">Удалить</button>
+        </div>
+      </div>
+    </div> 
+
+    <div id="container">
+      <div>
+        <h2>GET api/auditoriumTypes</h2>
+        <button id="load-auditoriumType" onclick="{getAuditoriumType()}">load</button>
+        <div id="auditoriumType-list"></div>
+      </div>
+
+      <div>
+        <h2>Добавить тип аудитории</h2>
+        <div>
+          <div class="form-group">
+            <label for="auditoriumType">Код типа аудитории:</label>
+            <input type="text" id="auditoriumType" required />
+          </div>
+          <div class="form-group">
+            <label for="auditoriumTypeName">тип аудитории:</label>
+            <input type="text" id="auditoriumTypeName" required />
+          </div>
+          <button id="add-auditoriumType" onclick="{postAuditoriumType()}">Добавить</button>
+        </div>
+      </div>
+
+      <div>
+        <h2>Редактировать тип аудитории</h2>
+        <div>
+          <div class="form-group">
+            <label for="editAuditoriumType">Код типа аудитории:</label>
+            <input type="text" id="editAuditoriumType" required />
+          </div>
+          <div class="form-group">
+            <label for="editAuditoriumTypeName">тип аудитории:</label>
+            <input type="text" id="editAuditoriumTypeName" required />
+          </div>
+          <button id="update-auditoriumType" onclick="{putAuditoriumType()}">Обновить</button>
+        </div>
+      </div>
+
+      <div>
+        <h2>Удалить тип аудитории</h2>
+        <div>
+          <div class="form-group">
+            <label for="deleteAuditoriumType">Код кафедры для удаления:</label>
+            <input type="text" id="deleteAuditoriumType" required />
+          </div>
+          <button id="delete-auditoriumType" onclick="{delAuditoriumType()}">Удалить</button>
+        </div>
+      </div>
+    </div> 
+
+    <div id="container">
+      <div>
+        <h2>GET api/auditorium</h2>
+        <button id="load-auditorium" onclick="{getAuditorium()}">load</button>
+        <div id="auditorium-list"></div>
+      </div>
+
+      <div>
+        <h2>Добавить аудиторию</h2>
+        <div>
+          <div class="form-group">
+            <label for="auditorium">Код аудитории:</label>
+            <input type="text" id="auditorium" required />
+          </div>
+          <div class="form-group">
+            <label for="auditoriumName">название аудитории:</label>
+            <input type="text" id="auditoriumName" required />
+          </div>
+          <div class="form-group">
+            <label for="auditoriumCapacity">вместимость аудитории:</label>
+            <input type="text" id="auditoriumCapacity" required />
+          </div>
+          <div class="form-group">
+            <label for="auditoriumTypeForAuditorium">код типа аудитории:</label>
+            <input type="text" id="auditoriumTypeForAuditorium" required />
+          </div>
+          <button id="add-auditoriumType" onclick="{postAuditorium()}">Добавить</button>
+        </div>
+      </div>
+
+      <div>
+        <h2>Редактировать аудиторию</h2>
+        <div class="form-group">
+          <label for="editAuditorium">Код аудитории:</label>
+          <input type="text" id="editAuditorium" required />
+        </div>
+        <div class="form-group">
+          <label for="editAuditoriumName">название аудитории:</label>
+          <input type="text" id="editAuditoriumName" required />
+        </div>
+        <div class="form-group">
+          <label for="editAuditoriumCapacity">вместимость аудитории:</label>
+          <input type="text" id="editAuditoriumCapacity" required />
+        </div>
+        <div class="form-group">
+          <label for="editAuditoriumTypeForAuditorium">код типа аудитории:</label>
+          <input type="text" id="editAuditoriumTypeForAuditorium" required />
+        </div>
+        <button id="edit-auditorium" onclick="{putAuditorium()}">Обновить</button>
+        </div>
+      </div>
+
+      <div>
+        <h2>Удалить аудиторию</h2>
+        <div>
+          <div class="form-group">
+            <label for="deleteAuditorium">Код аудитории для удаления:</label>
+            <input type="text" id="deleteAuditorium" required />
+          </div>
+          <button id="delete-auditorium" onclick="{delAuditorium()}">Удалить</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+  </body>
+</html>
