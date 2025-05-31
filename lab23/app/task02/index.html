@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Digital Signature Client</title>
+</head>
+<body>
+    <h2>Digital Signature Verification</h2>
+    <button onclick="fetchAndVerify()">Fetch and Verify</button>
+    <pre id="output"></pre>
+
+    <script>
+        async function fetchAndVerify() {
+            const res = await fetch('/resource');
+            const { data, signature, publicKey } = await res.json();
+
+            const enc = new TextEncoder();
+            const dec = new TextDecoder();
+
+            const key = await window.crypto.subtle.importKey(
+                'spki',
+                pemToArrayBuffer(publicKey),
+                {
+                    name: 'RSASSA-PKCS1-v1_5',
+                    hash: 'SHA-256'
+                },
+                false,
+                ['verify']
+            );
+
+            const isValid = await window.crypto.subtle.verify(
+                'RSASSA-PKCS1-v1_5',
+                key,
+                Uint8Array.from(atob(signature), c => c.charCodeAt(0)),
+                enc.encode(data)
+            );
+
+            document.getElementById('output').textContent = 
+                `Данные:\n${data}\n\nПодпись корректна? ${isValid}`;
+        }
+
+        function pemToArrayBuffer(pem) {
+            const b64 = pem.replace(/-----.*-----/g, '').replace(/\s/g, '');
+            const binary = atob(b64);
+            const buffer = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+                buffer[i] = binary.charCodeAt(i);
+            }
+            return buffer.buffer;
+        }
+    </script>
+</body>
+</html>

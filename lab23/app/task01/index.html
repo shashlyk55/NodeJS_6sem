@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DH Client</title>
+</head>
+<body>
+    <h2>DH Key Exchange Client</h2>
+    <button onclick="exchangeKeys()">Start Key Exchange</button>
+    <button onclick="getResource()">Download Resource</button>
+    <pre id="output"></pre>
+
+    <script>
+        let sharedKey;
+
+        async function exchangeKeys() {
+            const res = await fetch('/dh');
+            const data = await res.json();
+            const prime = data.prime;
+            const generator = data.generator;
+            const serverPub = data.serverPublicKey;
+
+            const dh = window.crypto.subtle;
+
+            // Use WebCrypto API fallback with forge if needed
+            const forgeDH = forge.pki.diffieHellman({
+                prime: new forge.jsbn.BigInteger(prime, 16),
+                generator: new forge.jsbn.BigInteger(generator, 16)
+            });
+
+            forgeDH.generateKeys();
+            sharedKey = forgeDH.computeSecret(serverPub);
+
+            await fetch('/key', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ clientPublicKey: forgeDH.publicKey })
+            });
+
+            document.getElementById('output').textContent = 'Key exchange complete';
+        }
+
+        async function getResource() {
+            const res = await fetch('/resource');
+            const data = await res.json();
+            const iv = forge.util.hexToBytes(data.iv);
+            const encrypted = forge.util.hexToBytes(data.data);
+
+            const key = forge.md.sha256.create().update(sharedKey).digest().getBytes();
+            const decipher = forge.cipher.createDecipher('AES-CBC', key);
+            decipher.start({ iv: iv });
+            decipher.update(forge.util.createBuffer(encrypted));
+            decipher.finish();
+
+            const result = decipher.output.toString();
+            document.getElementById('output').textContent = 'Decrypted:' + result;
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/node-forge@1.3.1/dist/forge.min.js"></script>
+</body>
+</html>
+*/

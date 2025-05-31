@@ -1,0 +1,112 @@
+openapi: 3.0.0
+info:
+  title: Phone book API
+  description: API
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+    description: Локальный сервер разработки
+paths:
+  /tel:
+    get:
+      summary: Получить полный список телефонов
+      description: Возвращает все записи из телефонного справочника в формате JSON
+      responses:
+        "200":
+          description: Успешный запрос
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PhoneEntry"
+    post:
+      summary: Добавить новый телефон в справочник
+      description: Создает новую запись в телефонном справочнике
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PhoneEntry"
+      responses:
+        "201":
+          description: Запись успешно создана
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PhoneEntry"
+        "400":
+          description: Неверные входные данные
+    put:
+      summary: Обновить запись в справочнике
+      description: Обновляет существующую запись в телефонном справочнике
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PhoneEntry"
+      responses:
+        "200":
+          description: Запись успешно обновлена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PhoneEntry"
+        "400":
+          description: Неверные входные данные
+        "404":
+          description: Запись не найдена
+    delete:
+      summary: Удалить запись из справочника
+      description: Удаляет запись из телефонного справочника
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: ID записи для удаления
+              required:
+                - id
+      responses:
+        "200":
+          description: Запись успешно удалена
+        "404":
+          description: Запись не найдена
+components:
+  schemas:
+    PhoneEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Уникальный идентификатор записи
+          example: 2
+        lastName:
+          type: string
+          description: Фамилия
+          example: Max
+        firstName:
+          type: string
+          description: Имя
+          example: Maximus
+        middleName:
+          type: string
+          description: Отчество
+          example: Maximov
+        phoneNumber:
+          type: string
+          description: Номер телефона
+          example: "+1 (111) 111-11-11"
+        address:
+          type: string
+          description: Адрес
+          example: "ул. Ленинская, д. 10"
+      required:
+        - lastName
+        - phoneNumber
